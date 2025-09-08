@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib
-import random
+# import random
 
 matplotlib.use("Agg")
 
@@ -49,12 +49,12 @@ print(f"Q2 result: {result}")
 # x = [2%,   1%,   -2%,  4%,   -1%]
 # y = [3%,   0%,   1%,   2%,   1%]
 
-# x3 = [2, 1, -2, 4, -1]
-# y3 = [3, 0, 1, 2, 1]
+x3 = [2, 1, -2, 4, -1]
+y3 = [3, 0, 1, 2, 1]
 
 # random values (No linear relationship between variables)
-x3 = [random.randint(1, 500) for _ in range(100)]
-y3 = [random.randint(1, 500) for _ in range(100)]
+# x3 = [random.randint(1, 500) for _ in range(100)]
+# y3 = [random.randint(1, 500) for _ in range(100)]
 
 # restrictions x and y lengths must be equal
 assert len(x3) == len(y3)
@@ -74,5 +74,5 @@ plt.xlabel("x")
 plt.ylabel("y")
 plt.title("Scatter plot of Q3")
 plt.grid(True)
-plt.savefig("section-04/output/covariance_q3_scatter_plot.png")
+plt.savefig("section-04/output/covariance_q3_scatter_plot2.png")
 plt.close()
