@@ -1,3 +1,6 @@
+from typing import List, Tuple, Dict, Union
+
+
 class Statistics:
     def __init__(self, data_set: list[int]):
         self.data_set = data_set
@@ -26,43 +29,54 @@ class Statistics:
             return sorted_data_set[position]
 
     @staticmethod
-    def get_range(data_set: list[int]) -> int:
+    def get_range(data_set: list[int] | tuple[int, int]) -> int | float:
+        if isinstance(data_set, tuple):
+            return data_set[1] - data_set[0]
+
         sorted_set = sorted(data_set)
         return sorted_set[-1] - sorted_set[0]
 
     @staticmethod
-    def get_iqr(data_set: list[int]) -> float:
+    def get_iqr(data_set: Union[List[int], Tuple[float, float]]) -> Dict[str, float]:
         """
-        Interquartile range (IQR)
-            IQR = Q3 - Q1
-            Q1 = 1st Quartile (25th percentile)
-            Q3 = 3rd Quartile (75th percentile)
+        Interquartile range (IQR) using the median of halves method.
+        IQR = Q3 - Q1
+        Q1 = 1st Quartile (median of lower half)
+        Q3 = 3rd Quartile (median of upper half)
 
-        int() -> rounds down to nearest integer e.g. int(4.99) = 4, int(4.01) = 4
+        If data_set is a tuple, it assumes (Q1, Q3) and returns IQR directly.
         """
+        if isinstance(data_set, tuple):
+            return {
+                "q1": data_set[0],
+                "q3": data_set[1],
+                "iqr": data_set[1] - data_set[0],
+            }
+
         sorted_set = sorted(data_set)
         n = len(sorted_set)
 
-        # Calculate Q1 (first quartile)
-        q1_position = (n + 1) * 0.25
-        if q1_position.is_integer():
-            q1 = sorted_set[int(q1_position) - 1]
-        else:
-            # Interpolate between two positions
-            lower_pos = int(q1_position) - 1
-            upper_pos = int(q1_position)
-            q1 = (sorted_set[lower_pos] + sorted_set[upper_pos]) / 2
+        # def median(data: List[int]) -> float:
+        #     n_med = len(data)
+        #     if n_med % 2 == 1:
+        #         return data[n_med // 2]
+        #     else:
+        #         return (data[n_med // 2 - 1] + data[n_med // 2]) / 2.0
 
-        # Calculate Q3 (third quartile)
-        q3_position = (n + 1) * 0.75
-        if q3_position.is_integer():
-            q3 = sorted_set[int(q3_position) - 1]
+        # Split data into lower and upper halves
+        mid = n // 2
+        if n % 2 == 0:
+            lower_half = sorted_set[:mid]
+            upper_half = sorted_set[mid:]
         else:
-            # Interpolate between two positions
-            lower_pos = int(q3_position) - 1
-            upper_pos = int(q3_position)
-            q3 = (sorted_set[lower_pos] + sorted_set[upper_pos]) / 2
-        return q3 - q1
+            lower_half = sorted_set[:mid]
+            upper_half = sorted_set[mid + 1 :]
+
+        q1 = Statistics.get_median(lower_half)
+        q3 = Statistics.get_median(upper_half)
+        iqr = q3 - q1
+
+        return {"q1": q1, "q3": q3, "iqr": iqr}
 
     @staticmethod
     def get_full_list_from_frequency(data_set: list[tuple[int, int]]) -> list[int]:
@@ -72,3 +86,59 @@ class Statistics:
             if frequency > 0:
                 full_list += [value] * frequency
         return full_list
+
+    @staticmethod
+    def get_mean(data_set: list[int]) -> float:
+        return sum(data_set) / len(data_set)
+
+    @staticmethod
+    def get_extremes(data_set: list[int]) -> dict[str, int]:
+        """
+        Get the minimum and maximum values from a list
+        """
+        return {
+            "min": min(data_set),
+            "max": max(data_set),
+        }
+
+    @staticmethod
+    def get_weighted_mean(data_set: list[tuple[int, int]]) -> float:
+        """
+        Weighted mean formula
+            X̄ = Σ(w_i * x_i) / Σw_i
+            x_i = value
+            w_i = weight
+        """
+        return sum([w_i * x_i for x_i, w_i in data_set]) / sum(
+            [w_i for _, w_i in data_set]
+        )
+
+    @staticmethod
+    def get_list_from_steam_and_leaf(
+        data_set: dict[int, list[int | float]],
+    ) -> list[int | float]:
+        full_list = []
+        for steam, leaves in data_set.items():
+            for leaf in leaves:
+                full_list.append(
+                    float(f"{steam}{leaf}")
+                    if isinstance(leaf, float)
+                    else int(f"{steam}{leaf}")
+                )
+        return full_list
+
+
+class TemperatureConverter:
+    @staticmethod
+    def celsius_to_fahrenheit(celsius: float) -> float:
+        return (celsius * 9 / 5) + 32
+
+    @staticmethod
+    def fahrenheit_to_celsius(fahrenheit: float) -> float:
+        return (fahrenheit - 32) * 5 / 9
+
+
+class Normalizer:
+    @staticmethod
+    def thousands_separator(num: int) -> str:
+        return f"{num:,}"
