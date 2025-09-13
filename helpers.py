@@ -1,4 +1,5 @@
-from typing import List, Tuple, Dict, Union
+from math import sqrt
+from typing import List, Tuple, Dict, Union, Callable
 
 
 class Statistics:
@@ -126,6 +127,65 @@ class Statistics:
                     else int(f"{steam}{leaf}")
                 )
         return full_list
+
+    @staticmethod
+    def get_variance(
+        data_set: list[int],
+        population: bool = False,
+        mean_cb: Callable[[], float] | None = None,
+    ) -> float:
+        """
+        Population variance formula:
+            σ^2 = Σ(x_i - μ)^2 / N
+        Sample variance formula:
+            s^2 = Σ(x_i - x̄)^2 / (n - 1)
+        """
+        mean = mean_cb() if mean_cb is not None else Statistics.get_mean(data_set)
+        divisor = len(data_set) if population else len(data_set) - 1
+        return sum((x - mean) ** 2 for x in data_set) / divisor
+
+    @staticmethod
+    def get_standard_deviation(
+        data_set: list[int],
+        population: bool = False,
+        mean_cb: Callable[[list[int]], float] | None = None,
+    ) -> float:
+        """
+        Population standard deviation formula:
+            σ = √(Σ(x_i - μ)^2 / N)
+        Sample standard deviation formula:
+            s = √(Σ(x_i - x̄)^2 / (n - 1))
+        """
+        return sqrt(Statistics.get_variance(data_set, population, mean_cb))
+
+    @staticmethod
+    def get_interval_frequencies(
+        data_set: list[int], intervals: list[tuple[int, int]]
+    ) -> dict[str, tuple[int, float]]:
+        """
+        Get the frequency of each interval in the data set.
+
+        Returns a dictionary with the interval as key and a tuple of (frequency, relative frequency) as value.
+        """
+        frequencies = {}
+        total = len(data_set)
+
+        for interval in intervals:
+            first = interval[0]
+            second = interval[1]
+            current_interval_index = intervals.index(interval)
+            next_interval = (
+                intervals[current_interval_index + 1]
+                if current_interval_index + 1 < len(intervals)
+                else None
+            )
+            next_first = next_interval[0] if next_interval is not None else None
+            if second == next_first:
+                amount = len([value for value in data_set if first <= value < second])
+            else:
+                amount = len([value for value in data_set if first <= value <= second])
+            frequencies[f"{first}-{second}"] = (amount, amount / total)
+        return frequencies
 
 
 class TemperatureConverter:
