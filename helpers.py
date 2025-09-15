@@ -1,4 +1,4 @@
-from math import sqrt
+from math import sqrt, erf
 from typing import List, Tuple, Dict, Union, Callable
 
 
@@ -186,6 +186,31 @@ class Statistics:
                 amount = len([value for value in data_set if first <= value <= second])
             frequencies[f"{first}-{second}"] = (amount, amount / total)
         return frequencies
+
+    @staticmethod
+    def get_outliers(data_set: list[int]) -> dict[str, list[int]]:
+        iqr = Statistics.get_iqr(data_set)
+        lower_bound = iqr["q1"] - (1.5 * iqr["iqr"])
+        upper_bound = iqr["q3"] + (1.5 * iqr["iqr"])
+        outliers = [
+            value for value in data_set if value < lower_bound or value > upper_bound
+        ]
+        return {
+            "outliers": outliers,
+            "lower_bound": lower_bound,
+            "upper_bound": upper_bound,
+        }
+
+    @staticmethod
+    def get_z_score(data_set: list[int], value: int) -> float:
+        mean = Statistics.get_mean(data_set)
+        std = Statistics.get_standard_deviation(data_set)
+        return (value - mean) / std
+
+    @staticmethod
+    def z_to_probability(z: float) -> float:
+        """Calculate cumulative probability for a z-score using error function"""
+        return 0.5 * (1 + erf(z / sqrt(2)))
 
 
 class TemperatureConverter:

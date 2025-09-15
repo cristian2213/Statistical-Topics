@@ -2,6 +2,7 @@ import sys
 import os
 import matplotlib.pyplot as plt
 import matplotlib
+import statistics
 
 matplotlib.use("Agg")
 
@@ -134,3 +135,114 @@ ax.set_ylabel("Relative Frequency")
 ax.grid(True)
 plt.savefig("section-04/output/question-3-frequency-polygon.png", bbox_inches="tight")
 plt.close()
+
+# QUESTiON 3
+data_set = [6, 8, 9, 10, 10, 11, 11, 12, 12, 13, 15, 15, 18, 19, 20, 20, 21]
+iqr = Statistics.get_iqr(data_set)
+q1 = iqr["q1"]
+q3 = iqr["q3"]
+iqr = iqr["iqr"]
+lower_bound = q1 - (1.5 * iqr)
+upper_bound = q3 + (1.5 * iqr)
+outliers = [value for value in data_set if value < lower_bound or value > upper_bound]
+print(lower_bound, upper_bound, outliers, "\n")
+
+# QUESTION 4
+data_set = [
+    0,
+    18,
+    19,
+    20,
+    20,
+    20,
+    21,
+    23,
+    23,
+    23,
+    24,
+    24,
+    24,
+    24,
+    24,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    30,
+    30,
+    31,
+]
+result = Statistics.get_outliers(data_set)
+print(result, "\n")
+# Central tendency: Median
+# Spread : IQR
+
+# QUESTION 5
+data_set = [(12, 1), (13, 0), (14, 1), (15, 3), (16, 5), (17, 7), (18, 8), (19, 5)]
+full_list = Statistics.get_full_list_from_frequency(data_set)
+median = Statistics.get_median(full_list)
+outliers = Statistics.get_outliers(full_list)
+iqr = Statistics.get_iqr(full_list)
+print(median, outliers, iqr, "\n")
+# Shape: Left-skewed distribution
+# Central tendency: 17.0
+# Spread : IQR 2
+# Outliers: [12]
+
+# QUESTION 6
+data_set = [(22, 1), (23, 2), (24, 3), (25, 4), (26, 3), (27, 2), (28, 1)]
+full_list = Statistics.get_full_list_from_frequency(data_set)
+median = Statistics.get_median(full_list)
+outliers = Statistics.get_outliers(full_list)
+standard_deviation = Statistics.get_standard_deviation(full_list)
+print(median, outliers, standard_deviation, "\n")
+# Shape: Symmetric distribution
+# Central tendency: Mean or Median 25.0
+# Spread : Standard Deviation 1.632993161855452
+# Outliers: None
+
+print(
+    "# ***************************\n"
+    "# NORMAL DISTRIBUTIONS AND Z-SCORES\n"
+    "# ***************************"
+)
+
+# QUESTION 1
+mean = 62
+std = 5
+value = 50
+z_score = (value - mean) / std
+print("question 1 z-score", z_score, "\n")
+
+# QUESTION 3 (CMs)
+mean = 170
+std = 8
+value = 154
+# returns the percentage of values less than or equal to the given value
+percentage = statistics.NormalDist(mean, std).cdf(value) * 100
+print("question 3 percentage", percentage, "%", "\n")
+
+# QUESTION 4 (Inches)
+mean = 18
+std = 4
+percentile = 0.21
+# returns the value at the given percentile
+value_21st_percentile = statistics.NormalDist(mean, std).inv_cdf(percentile)
+print("question 4 value", value_21st_percentile, "\n")
+
+# QUESTION 5 (68% of normal distribution)
+range_68_percent = (mean - std, mean + std)
+print("question 5 values", range_68_percent, "\n")
+
+# QUESTION 6 (IQ Scores)
+mean = 100
+std = 16
+val1 = 120
+val2 = 140
+z_core1 = (val1 - mean) / std
+z_core2 = (val2 - mean) / std
+percentage1 = Statistics.z_to_probability(z_core1)
+percentage2 = Statistics.z_to_probability(z_core2)
+print("question 6 percentage", percentage2 - percentage1)
