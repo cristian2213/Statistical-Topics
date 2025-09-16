@@ -311,3 +311,79 @@ k = Statistics.get_k_inverse(chebyshev_percentage)
 result = Statistics.get_ranges_by_k(mean_weight, k, std)
 print(f"question 6 weight range ({result[0]} to {result[1]})", "\n")
 # Ans. The central 82% of the data has a weight between ~43.4 and ~156.6 pounds.
+
+print("# ***************************\n# COVARIANCE\n# ***************************")
+# QUESTION 1 (covariance of customers and sales)
+customers = [4, 7, 12, 2, 3, 9, 15]
+sales = [45.75, 36.00, 58.5, 20.00, 15.80, 39.95, 123.45]
+covariance = Statistics.get_covariance(customers, sales)
+print(f"question 1 - S_xy: {covariance}")
+
+# QUESTION 2 (covariance of the cost of the stock of two companies)
+company_x = [13, 13.75, 12.70, 13.15, 14.80]
+company_y = [21.05, 21.55, 20.95, 21.75, 21.50]
+covariance = Statistics.get_covariance(company_x, company_y)
+print(f"question 2 - S_xy: {covariance}")
+
+# QUESTION 3 (covariance for temperature in two cities)
+city_x = [25, 23, 24.5, 20, 18]
+city_y = [23, 24, 21, 18, 22]
+covariance = Statistics.get_covariance(city_x, city_y)
+print(f"question 3 - S_xy: {covariance}")
+
+# QUESTION 4 (covariance for test scores)
+math_x = [85, 89, 89, 93]
+physics_y = [92, 93, 89, 90]
+covariance = Statistics.get_covariance(math_x, physics_y)
+print(f"question 4 - S_xy: {covariance}")
+
+# QUESTION 5 (covariance for minutes of daily exercise over 10 days of two friends)
+mark_x = [53, 57, 63, 55, 45, 50, 65, 60, 59, 70]
+john_y = [65, 55, 60, 53, 30, 45, 25, 65, 57, 50]
+covariance = Statistics.get_covariance(mark_x, john_y)
+print(f"question 5 - S_xy: {covariance}")
+
+# QUESTION 6 (covariance for an annual return on investment of two stocks over the last 7 years)
+stock_x = [3.5, 2.4, 1.4, -0.5, 0.7, 1.1, 0.5]
+stock_y = [2.4, 1.7, 2.1, 1.8, 2.1, -0.4, 0.8]
+covariance = Statistics.get_covariance(stock_x, stock_y)
+print(f"question 6 - S_xy: {covariance}", "\n")
+
+print(
+    "# ***************************\n# CORRELATION COEFFICIENT\n# ***************************"
+)
+# QUESTION 1 (correlation coefficient of weight and body length)
+weight_kg = [3.55, 4.01, 3.05, 5.35, 4.22, 6.12, 7.45, 5.95, 6.35, 6.98]
+body_length = [51, 54, 50, 60, 52, 61, 63, 59, 68, 74]
+correlation = Statistics.get_correlation_coefficient(weight_kg, body_length)
+print(f"question 1 - r: {correlation}")
+# Interpretation:
+# - Direction: Positive (as weight increases, body length also increases)
+# - Strength: Strong (r ~ 0.8790 or 87.90%)
+
+# QUESTION 2 (correlation of study hours and exam scores)
+study_hours = [6, 2, 11, 7, 5]
+exam_scores = [85, 79, 84, 89, 91]
+correlation = Statistics.get_correlation_coefficient(study_hours, exam_scores)
+print(f"question 2 - r: {correlation}")
+# Interpretation:
+# - Direction: Positive
+# - Strength: Weak (r ~ 0.2685 or 26.85%, For this data set the correlation is positive but weak, which means that studying more hours won't improve the probability of getting a higher exam score.)
+
+# QUESTION 3 (correlation of age in years, and blood glucose levels, in mg/dL)
+age_years = [28, 35, 58, 42, 21, 63, 46]
+blood_glucose = [101, 93, 95, 105, 93, 89, 100]
+correlation = Statistics.get_correlation_coefficient(age_years, blood_glucose)
+print(f"question 3 - r: {correlation}")
+# Interpretation:
+# - Direction: Negative
+# - Strength: Weak (r ~ -0.2584 or 25.84%, For this data set the correlation is negative and weak, which means that as age increases, blood glucose levels tend to decrease slightly.)
+
+# QUESTION 4 (correlation of shark attacks and ice cream sales in different days)
+shark_attacks = [4, 2, 8, 11, 5, 9]
+ice_cream_sales = [38, 30, 55, 61, 38, 42]
+correlation = Statistics.get_correlation_coefficient(shark_attacks, ice_cream_sales)
+print(f"question 4 - r: {correlation}", "\n")
+# Interpretation:
+# - Direction: Positive
+# - Strength: Strong (r ~ 0.8837 or 88.37%, For this data set the correlation is positive and strong, which means that as shark attacks increase, ice cream sales also increase. although there could be other factors affecting both variables, as sunny days, tourist season, among others.)

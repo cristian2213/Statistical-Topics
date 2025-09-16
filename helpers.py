@@ -272,6 +272,53 @@ class Statistics:
         """
         return 0.5 * (1 + erf(z / sqrt(2)))
 
+    @staticmethod
+    def get_covariance(
+        variable_x: list[int], variable_y: list[int], population: bool = False
+    ) -> float:
+        """
+        Get the covariance of a data set.
+
+        Population covariance formula:
+            cov(x, y) = Σ[(x_i - μ_x)(y_i - μ_y)] / N
+        Sample covariance formula:
+            cov(x, y) = Σ[(x_i - x̄)(y_i - ȳ)] / (n - 1)
+        """
+        assert len(variable_x) == len(variable_y)
+
+        n = len(variable_x)
+        mean_x = Statistics.get_mean(variable_x)
+        mean_y = Statistics.get_mean(variable_y)
+
+        if population:
+            return (
+                sum((x - mean_x) * (y - mean_y) for x, y in zip(variable_x, variable_y))
+                / n
+            )
+        else:
+            return sum(
+                (x - mean_x) * (y - mean_y) for x, y in zip(variable_x, variable_y)
+            ) / (n - 1)
+
+    @staticmethod
+    def get_correlation_coefficient(
+        variable_x: list[int], variable_y: list[int], population: bool = False
+    ) -> float:
+        """
+        Get the correlation coefficient of a data set.
+
+        Population correlation coefficient formula:
+            r_xy = (Σ[(x_i - μ_x)(y_i - μ_y)] / N) / (σ_x * σ_y)
+        Sample correlation coefficient formula:
+            r_xy = (Σ[(x_i - x̄)(y_i - ȳ)] / (n - 1)) / (s_x * s_y)
+        """
+        assert len(variable_x) == len(variable_y)
+
+        covariance = Statistics.get_covariance(variable_x, variable_y, population)
+        std_x = Statistics.get_standard_deviation(variable_x, population)
+        std_y = Statistics.get_standard_deviation(variable_y, population)
+        return covariance / (std_x * std_y)
+
 
 class TemperatureConverter:
     @staticmethod
