@@ -246,3 +246,68 @@ z_core2 = (val2 - mean) / std
 percentage1 = Statistics.z_to_probability(z_core1)
 percentage2 = Statistics.z_to_probability(z_core2)
 print("question 6 percentage", percentage2 - percentage1)
+
+print(
+    "# ***************************\n"
+    "# CHEBYSHEV’S THEOREM\n"
+    "# ***************************"
+)
+
+# QUESTION 1
+# Ans. It tells us that at least 75% of the data must be within 2 standard deviations of the mean.
+
+# QUESTION 2 ( What percentage of the strawberries in the basket have a weight between 1.5 and 2.5 ounces?)
+mean_weight = 2
+std = 0.35
+weights = (1.5, 2.5)
+k1 = (weights[1] - mean_weight) / std
+k2 = (weights[0] - mean_weight) / std
+k = k1 if k1 > 0 else k2
+percentage = 1 - (1 / k**2)
+print("question 2 percentage", percentage, "%", "\n")
+# Ans. 0.51% of the strawberries in the basket have a weight between 1.5 and 2.5 ounces.
+
+# QUESTION 3
+total_whales = 580
+mean_distance = 2_000  # miles
+std = 175  # miles
+distance_range = (1_600, 2_400)
+k1 = Statistics.get_k_deviations(distance_range[0], mean_distance, std)
+k2 = Statistics.get_k_deviations(distance_range[1], mean_distance, std)
+k = Statistics.get_positive_k(k1, k2)
+percentage = Statistics.get_chebyshev_theorem(k) * 100
+whales = Statistics.get_percentage_of(total_whales, percentage)
+print(
+    "question 3 amount of whales which traveled between 1,600 and 2,400 miles",
+    whales,
+    "\n",
+)
+# Ans. About 469 whales traveled between 1,600 and 2,400 miles.
+
+# QUESTION 4 (Find the height range for the central 90% of team members.)
+mean_height = 73  # inches
+std = 1.8
+chebyshev_percentage = 90 / 100
+k = Statistics.get_k_inverse(chebyshev_percentage)
+result = Statistics.get_ranges_by_k(mean_height, k, std)
+print(f"question 4 height range ({result[0]} to {result[1]})", "\n")
+# Ans. 90% of team members have a height between ~67.3 and ~78.7 inches.
+
+# QUESTION 5 (Find the values that make up the middle 75% of the yearly acceptance range.)
+total_students = 40_000
+mean_new_students_by_year = 10_000
+std = 500
+chebyshev_percentage = 75 / 100
+k = Statistics.get_k_inverse(chebyshev_percentage)
+result = Statistics.get_ranges_by_k(mean_new_students_by_year, k, std)
+print(f"question 5 yearly acceptance range ({result[0]} to {result[1]})", "\n")
+# Ans. The middle 75% of the yearly acceptance range is between 9,000 and 11,000 students.
+
+# QUESTION 6 (Find the weight range for the central 82% of the data.)
+mean_weight = 100  # pounds
+std = 24
+chebyshev_percentage = 82 / 100
+k = Statistics.get_k_inverse(chebyshev_percentage)
+result = Statistics.get_ranges_by_k(mean_weight, k, std)
+print(f"question 6 weight range ({result[0]} to {result[1]})", "\n")
+# Ans. The central 82% of the data has a weight between ~43.4 and ~156.6 pounds.

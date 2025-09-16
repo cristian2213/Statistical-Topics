@@ -202,28 +202,97 @@ class Statistics:
         }
 
     @staticmethod
+    def get_k_deviations(value: float, mean: float, std: float) -> dict[str, list[int]]:
+        """
+        Get the k deviations of a data set.
+        """
+        k = (value - mean) / std
+        return k
+
+    @staticmethod
+    def get_positive_k(k1: float, k2: float) -> float:
+        """
+        Get the positive k value from two k values.
+        """
+        return k1 if k1 > 0 else k2
+
+    @staticmethod
+    def get_chebyshev_theorem(k: float) -> float:
+        """
+        Get the chebyshev theorem value from a k value.
+        """
+        decimal_percentage = 1 - (1 / k**2)
+        return decimal_percentage
+
+    @staticmethod
+    def get_k_inverse(chebyshev_percentage: float) -> float:
+        """
+        Get the k value from a chebyshev percentage.
+        Formula:
+            C = 1 - (1 / k^2) => k = sqrt(1 / (1 - C))
+        Where:
+            C = Chebyshev percentage
+            k = K value
+        """
+        return sqrt(1 / (1 - chebyshev_percentage))
+
+    @staticmethod
+    def get_ranges_by_k(mean: float, k: float, std: float) -> tuple[float, float]:
+        """
+        Get the ranges by k value.
+        Formula:
+            lower = mean - (k * std)
+            upper = mean + (k * std)
+        """
+        lower = mean - (k * std)
+        upper = mean + (k * std)
+        return (lower, upper)
+
+    @staticmethod
+    def get_percentage_of(total_amount: int, percentage: int) -> float:
+        """
+        Get the percentage of a total amount.
+        """
+        decimal_percentage = percentage / 100
+        return round(total_amount * decimal_percentage)
+
+    @staticmethod
     def get_z_score(data_set: list[int], value: int) -> float:
+        """
+        Get the z score of a data set.
+        """
         mean = Statistics.get_mean(data_set)
         std = Statistics.get_standard_deviation(data_set)
         return (value - mean) / std
 
     @staticmethod
     def z_to_probability(z: float) -> float:
-        """Calculate cumulative probability for a z-score using error function"""
+        """
+        Calculate cumulative probability for a z-score using error function
+        """
         return 0.5 * (1 + erf(z / sqrt(2)))
 
 
 class TemperatureConverter:
     @staticmethod
     def celsius_to_fahrenheit(celsius: float) -> float:
+        """
+        Convert celsius to fahrenheit.
+        """
         return (celsius * 9 / 5) + 32
 
     @staticmethod
     def fahrenheit_to_celsius(fahrenheit: float) -> float:
+        """
+        Convert fahrenheit to celsius.
+        """
         return (fahrenheit - 32) * 5 / 9
 
 
 class Normalizer:
     @staticmethod
     def thousands_separator(num: int) -> str:
+        """
+        Add thousands separator to a number.
+        """
         return f"{num:,}"
