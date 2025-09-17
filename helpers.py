@@ -103,12 +103,14 @@ class Statistics:
         }
 
     @staticmethod
-    def get_weighted_mean(data_set: list[tuple[int, int]]) -> float:
+    def get_weighted_mean(data_set: list[tuple[int | float, int]]) -> float:
         """
         Weighted mean formula
             X̄ = Σ(w_i * x_i) / Σw_i
             x_i = value
             w_i = weight
+
+        tuple format: (value, weight)
         """
         return sum([w_i * x_i for x_i, w_i in data_set]) / sum(
             [w_i for _, w_i in data_set]
@@ -157,6 +159,20 @@ class Statistics:
             s = √(Σ(x_i - x̄)^2 / (n - 1))
         """
         return sqrt(Statistics.get_variance(data_set, population, mean_cb))
+
+    @staticmethod
+    def generate_bin_intervals(min_value: int, bin_width: int, class_num: int):
+        """
+        Generate bin intervals for a data set.
+        Interval format: [(min_value, max_value), ...]
+        """
+        intervals = []
+        min_interval = min_value
+        for i in range(class_num):
+            upper_bound = min_interval + bin_width
+            intervals.append((min_interval, upper_bound))
+            min_interval = upper_bound + 1
+        return intervals
 
     @staticmethod
     def get_interval_frequencies(
@@ -318,6 +334,28 @@ class Statistics:
         std_x = Statistics.get_standard_deviation(variable_x, population)
         std_y = Statistics.get_standard_deviation(variable_y, population)
         return covariance / (std_x * std_y)
+
+    @staticmethod
+    def get_grouped_data_variance(
+        data_set: dict[str, tuple[int, float]], population: bool = False
+    ) -> dict[str, float]:
+        """
+        Get the grouped data variance.
+        Formula for population:
+            σ^2 = Σ[(f_i * (m_i - μ)^2) / Σf_i]
+        Formula for sample:
+            s^2 = Σ[(f_i * (m_i - x̄)^2) / (Σf_i) - 1]
+        """
+        data_set = [
+            ((int(value.split("-")[0]) + int(value.split("-")[1])) / 2, weight[0])
+            for value, weight in data_set.items()
+        ]
+        mean = Statistics.get_weighted_mean(data_set)
+        numerator = sum((m_i - mean) ** 2 * f_i for m_i, f_i in data_set)
+        denominator = sum(f_i for _, f_i in data_set)
+        if population:
+            return {"mean": mean, "variance": numerator / denominator}
+        return {"mean": mean, "variance": numerator / (denominator - 1)}
 
 
 class TemperatureConverter:

@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib
 import statistics
+import math
 
 matplotlib.use("Agg")
 
@@ -387,3 +388,122 @@ print(f"question 4 - r: {correlation}", "\n")
 # Interpretation:
 # - Direction: Positive
 # - Strength: Strong (r ~ 0.8837 or 88.37%, For this data set the correlation is positive and strong, which means that as shark attacks increase, ice cream sales also increase. although there could be other factors affecting both variables, as sunny days, tourist season, among others.)
+
+print(
+    "# ***************************\n# WEIGHTED MEANS AND GROUPED DATA\n# ***************************"
+)
+# QUESTION 1 (weighted mean of stock prices)
+stock_prices = [8, 10, 14, 9, 6, 13, 18, 21, 25, 27, 28, 31]
+shares = [30, 12, 10, 25, 35, 15, 10, 5, 7, 10, 8, 4]
+weighted_mean = Statistics.get_weighted_mean(list(zip(stock_prices, shares)))
+print(f"question 1 - X̄: ${weighted_mean:.2f}", "\n")
+
+# QUESTION 2
+discussions_weight = 0.05
+quizzes_weight = 0.10
+group_projects_weight = 0.40
+student_grades = [
+    {
+        "type": "quiz",
+        "grade": 88,
+    },
+    {
+        "type": "discussion",
+        "grade": 92,
+    },
+    {
+        "type": "quiz",
+        "grade": 93,
+    },
+    {
+        "type": "discussion",
+        "grade": 90,
+    },
+    {
+        "type": "quiz",
+        "grade": 85,
+    },
+    {
+        "type": "discussion",
+        "grade": 94,
+    },
+    {
+        "type": "quiz",
+        "grade": 97,
+    },
+    {
+        "type": "discussion",
+        "grade": 80,
+    },
+    {
+        "type": "group_project",
+        "grade": 85,
+    },
+]
+
+# list[tuple(value, weight)]
+grades_filtered = [
+    (
+        grade["grade"],
+        quizzes_weight
+        if grade["type"] == "quiz"
+        else discussions_weight
+        if grade["type"] == "discussion"
+        else group_projects_weight,
+    )
+    for grade in student_grades
+]
+weighted_mean = Statistics.get_weighted_mean(grades_filtered)
+print(f"question 2 - X̄: {weighted_mean:.2f}", "\n")
+
+# QUESTION 3 (grouped data)
+data_set = [12, 15, 8, 21, 25, 14, 16, 18, 10]
+sorted_data = sorted(data_set)
+data_range = sorted_data[-1] - sorted_data[0]
+bins_amount = 4
+bin_width = round(data_range / bins_amount)
+intervals = Statistics.generate_bin_intervals(sorted_data[0], bin_width, bins_amount)
+frequencies = Statistics.get_interval_frequencies(data_set, intervals)
+grouped_data_variance = Statistics.get_grouped_data_variance(frequencies)
+standard_deviation = math.sqrt(grouped_data_variance["variance"])
+print(f"question 3 - s^2: {grouped_data_variance['variance']}")
+print(f"question 3 - s: {standard_deviation}", "\n")
+
+# QUESTION 4
+number_of_books = [0, 1, 2, 3, 4, 5]
+number_of_people = [25, 15, 18, 5, 12, 3]
+data_set = list(zip(number_of_books, number_of_people))
+mean = Statistics.get_weighted_mean(data_set)
+print(f"question 4 - X̄: {mean}", "\n")
+
+# QUESTION 5
+frequencies = {
+    "5-7": (5, 0),
+    "8-10": (4, 0),
+    "11-13": (4, 0),
+    "14-16": (3, 0),
+    "17-19": (3, 0),
+    "20-22": (1, 0),
+}
+grouped_data_variance = Statistics.get_grouped_data_variance(frequencies)
+mean = grouped_data_variance["mean"]
+standard_deviation = math.sqrt(grouped_data_variance["variance"])
+print(f"question 5 - X̄: {mean}")
+print(f"question 5 - s^2: {grouped_data_variance['variance']}")
+print(f"question 5 - s: {standard_deviation}", "\n")
+
+# QUESTION 6
+frequencies = {
+    "1-5": (1, 0),
+    "6-10": (4, 0),
+    "11-15": (6, 0),
+    "16-20": (3, 0),
+    "21-25": (10, 0),
+    "26-30": (13, 0),
+}
+grouped_data_variance = Statistics.get_grouped_data_variance(frequencies)
+mean = grouped_data_variance["mean"]
+standard_deviation = math.sqrt(grouped_data_variance["variance"])
+print(f"question 6 - X̄: {mean}")
+print(f"question 6 - s^2: {grouped_data_variance['variance']}")
+print(f"question 6 - s: {standard_deviation}", "\n")
