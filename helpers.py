@@ -357,6 +357,24 @@ class Statistics:
             return {"mean": mean, "variance": numerator / denominator}
         return {"mean": mean, "variance": numerator / (denominator - 1)}
 
+    @staticmethod
+    def get_discrete_variance(scores: list[tuple[int, float]]) -> tuple[float, float]:
+        """
+        Input format: [(score, probability)]
+        Returns the variance of a discrete distribution
+        returns tuple(variance, mean)
+        """
+        mean = sum(map(lambda x: x[0] * x[1], scores))
+        variance = sum(map(lambda x: (x[0] - mean) ** 2 * x[1], scores))
+        return (variance, mean)
+
+    @staticmethod
+    def get_discrete_std(variance: float | int) -> float | int:
+        """
+        Return the standard deviation of a discrete distribution
+        """
+        return sqrt(variance)
+
 
 class TemperatureConverter:
     @staticmethod
@@ -381,3 +399,104 @@ class Normalizer:
         Add thousands separator to a number.
         """
         return f"{num:,}"
+
+
+class Dice:
+    """
+    Helper functions for dice rolling
+    """
+
+    @staticmethod
+    def check_divisibility(
+        combinations: list[tuple[int, int]], divisors: int | list[int]
+    ) -> list[tuple[int, int]]:
+        """
+        Returns a list of tuples that are divisible by the given divisor after being added
+        """
+        result = []
+        is_list = isinstance(divisors, list)
+        for combination in combinations:
+            for val_1, val_2 in combination:
+                sum = val_1 + val_2
+                if is_list:
+                    # FIXME - THIS IS A LIST, SO IT MUST BE ITERATED
+                    if sum % divisors[0] == 0 and sum % divisors[1] == 0:
+                        result.append((val_1, val_2))
+                else:
+                    if sum % divisors == 0:
+                        result.append((val_1, val_2))
+        return result
+
+    @staticmethod
+    def get_combinations(die_1: list[int], die_2: list[int]) -> list[tuple[int, int]]:
+        """
+        Returns a list of tuples
+        """
+        combinations = []
+        for val_1 in die_1:
+            row = []
+            for val_2 in die_2:
+                row.append((val_1, val_2))
+            combinations.append(row)
+        return combinations
+
+    @staticmethod
+    def get_sums(
+        combinations: list[tuple[int, int]], criteria: list[int]
+    ) -> list[tuple[int, int, int]]:
+        """
+        Returns a list of tuples that have a sum equal to the given criteria
+        """
+        sums = []
+        for combination in combinations:
+            for val_1, val_2 in combination:
+                sum = val_1 + val_2
+                for c in criteria:
+                    if sum == c:
+                        sums.append((val_1, val_2))
+        return sums
+
+    @staticmethod
+    def get_even_or_odd_sums(
+        combinations: list[tuple[int, int]], is_odd: bool = False
+    ) -> list[tuple[int, int, int]]:
+        """
+        Returns a list of tuples that have an even or odd sum
+        """
+        sums = []
+        for combination in combinations:
+            for val_1, val_2 in combination:
+                sum = val_1 + val_2
+                if is_odd:
+                    if sum % 2 == 1:
+                        sums.append((val_1, val_2))
+                else:
+                    if sum % 2 == 0:
+                        sums.append((val_1, val_2))
+        return sums
+
+    @staticmethod
+    def get_dice_sums(combinations: list[tuple[int, int]]) -> dict[int, int]:
+        """
+        Returns a dictionary of tuples that have a sum equal to the given criteria
+        """
+        sums = {
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0,
+            9: 0,
+            10: 0,
+            11: 0,
+            12: 0,
+        }
+
+        for combination in combinations:
+            for val_1, val_2 in combination:
+                amount = val_1 + val_2
+                sums[amount] += 1
+
+        return sums
