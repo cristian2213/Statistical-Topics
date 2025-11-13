@@ -1,4 +1,4 @@
-from math import sqrt, erf
+from math import sqrt, erf, exp, factorial
 from typing import List, Tuple, Dict, Union, Callable
 
 
@@ -374,6 +374,54 @@ class Statistics:
         Return the standard deviation of a discrete distribution
         """
         return sqrt(variance)
+
+    @staticmethod
+    def get_poisson_probability(x: int, mean: float):
+        """
+        Calculate the probability of x occurrences using the Poisson distribution.
+        Formula: P(X=x) = (e^-mean * mean^x) / x!
+
+        Args:
+        x: number of occurrences
+        mean: average number of occurrences (lambda)
+
+        Returns:
+        Probability of exactly x occurrences
+        """
+        if x < 0:
+            return 0
+
+        e_to_negative_mean = exp(-mean)
+        mean_to_power_x = mean**x
+        factorial_x = factorial(x)
+
+        probability = (e_to_negative_mean * mean_to_power_x) / factorial_x
+        return probability
+
+    @staticmethod
+    def get_binomial_probability(n: int, k: int, p: float) -> float:
+        """
+        Calculate the probability of exactly k successes in n trials using the Binomial distribution.
+        Formula: P(X=k) = C(n,k) * p^k * (1-p)^(n-k)
+        Where C(n,k) = n! / (k! * (n-k)!)
+
+        Args:
+            n: number of trials
+            k: number of successes
+            p: probability of success in each trial
+
+        Returns:
+            Probability of exactly k successes in n trials
+        """
+        if k < 0 or k > n or p < 0 or p > 1:
+            return 0
+
+        # Calculate binomial coefficient C(n, k)
+        binomial_coefficient = factorial(n) / (factorial(k) * factorial(n - k))
+
+        # Calculate probability
+        probability = binomial_coefficient * (p**k) * ((1 - p) ** (n - k))
+        return probability
 
 
 class TemperatureConverter:
