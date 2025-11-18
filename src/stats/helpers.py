@@ -358,6 +358,17 @@ class Statistics:
         return {"mean": mean, "variance": numerator / (denominator - 1)}
 
     @staticmethod
+    def get_discrete_mean(scores: list[tuple[int, float]]) -> float:
+        """
+        Calculate the expected value (mean) of a discrete distribution.
+        Formula: E(X) = Σ(X_i * P(X_i))
+
+        Input format: [(value, probability), ...]
+        Returns the mean (expected value) of the discrete distribution
+        """
+        return sum(map(lambda x: x[0] * x[1], scores))
+
+    @staticmethod
     def get_discrete_variance(scores: list[tuple[int, float]]) -> tuple[float, float]:
         """
         Input format: [(score, probability)]

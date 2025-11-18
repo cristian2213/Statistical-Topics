@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from helpers import Statistics
+from src.stats.helpers import Statistics
 
 print(
     "# ***************************\n"

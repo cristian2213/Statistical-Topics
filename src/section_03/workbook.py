@@ -7,7 +7,7 @@ matplotlib.use("Agg")
 
 # Add parent directory to path to import helpers
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from helpers import Statistics, TemperatureConverter, Normalizer
+from src.stats.helpers import Statistics, TemperatureConverter, Normalizer
 
 
 print(

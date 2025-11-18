@@ -1,9 +1,4 @@
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from helpers import Dice
+from stats import Dice
 
 # QUESTION 1
 die_1 = list(range(1, 7))

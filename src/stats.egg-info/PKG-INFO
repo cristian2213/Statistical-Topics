@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: stats
+Version: 0.1.0
+Summary: A package for statistics
+Author: Cristian
+Author-email: crislm1322@gmail.com
+Requires-Python: >=3.9
+Dynamic: author
+Dynamic: author-email
+Dynamic: requires-python
+Dynamic: summary
