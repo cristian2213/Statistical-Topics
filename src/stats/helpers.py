@@ -434,6 +434,25 @@ class Statistics:
         probability = binomial_coefficient * (p**k) * ((1 - p) ** (n - k))
         return probability
 
+    @staticmethod
+    def get_geometric_probability(n: int, p: float) -> float:
+        """
+        Calculate the probability of the first success on the n-th trial using the Geometric distribution.
+        Formula: P(X=n) = (1-p)^(n-1) * p
+
+        Args:
+            n: trial number
+            p: probability of success in each trial
+
+        Returns:
+            Probability of the first success on the n-th trial
+        """
+        if p < 0 or p > 1:
+            return 0
+
+        probability = (1 - p) ** (n - 1) * p
+        return probability
+
 
 class TemperatureConverter:
     @staticmethod
